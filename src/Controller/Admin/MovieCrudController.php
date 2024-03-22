@@ -12,6 +12,7 @@ use EasyCorp\Bundle\EasyAdminBundle\Field\TextareaField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextEditorField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TimeField;
+use Vich\UploaderBundle\Form\Type\VichImageType;
 
 class MovieCrudController extends AbstractCrudController
 {
@@ -27,6 +28,7 @@ class MovieCrudController extends AbstractCrudController
         yield DateField::new('release_date', 'Date de sortie');
         yield TimeField::new('duration', 'Durée');
         yield TextEditorField::new('synopsis', 'Synopsis');
+        yield TextareaField::new('imageFile')->setFormType(VichImageType::class)->hideOnIndex();
         yield AssociationField::new('directors', 'Réalisateurs');
         yield AssociationField::new('genres', 'Genre');
     }
