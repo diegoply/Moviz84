@@ -4,9 +4,13 @@
 
 {% block body %}
 
+    <div class="row text-center" >
     {% for movie in movies %}
-
-        <h2>{{ movie.name }}</h2>
+         {% include "partials/movie/_movie_block.html.twig" %}
     {% endfor %}
+    </div>
+       
+
+    
 
 {% endblock %}
