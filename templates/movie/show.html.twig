@@ -3,7 +3,41 @@
 {% block title %}Titre du film{% endblock %}
 
 {% block body %}
+  <h1 class="display-5 fw-bold text-body-emphasis lh-1 mb-3">{{ movie.name }}</h1>
+  <div class="row">
+    <div class="col">
+    <h2>Date de sortie:</h2>
+    {% if movie.releaseDate %}
+        {{ movie.releaseDate.format("d/m/Y") }}
+    {% else %}
+      <p>N/C</p>
+    {% endif %}
 
+    </div>
+
+    <div class="col">
+    <h2>Durée:</h2>
+    {% if movie.duration %}
+        {{ movie.duration.format("H") }}h{{ movie.duration.format("i") }}
+    {% else %}
+      <p>N/C</p>
+    {% endif %}
+
+    </div>
+
+    <div class="col">
+      {% for genre in movie.genres %}
+          <a href="">{{ genre.name }}</a>
+      {% endfor %}
+    </div>
+
+    <div class="col">
+      {% for director in movie.directors %}
+          {{ director.firstName }} {{ director.lastName }}
+      {% endfor %}
+    </div>
+        
+  </div>
    <div class="row flex-lg-row-reverse  g-5 py-5">
       <div class="col-10 col-sm-8 col-lg-4">
         {% if movie.imageName %}
@@ -13,13 +47,20 @@
         {% endif %}
       </div>
       <div class="col-lg-8">
-        <h1 class="display-5 fw-bold text-body-emphasis lh-1 mb-3">{{ movie.name }}</h1>
+       
         <p class="lead">{{ movie.synopsis | raw }}</p>
       </div>
     </div>
        
     <div class="row">
+  <h2>Notez ce film</h2>
+    {% if user %}
         {{ include('partials/review/_form.html.twig')}}
+      {% else %}
+      <p>Vous devez etre connecté pour pouvoir noter ce film. Rendez-vous sur la page
+        <a href="{{ path('app_login' ) }}" >connexion</a>
+      </p>
+    {% endif %}
     </div>
 
     

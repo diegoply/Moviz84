@@ -47,6 +47,9 @@ class AppCustomAuthentificationAuthenticator extends AbstractLoginFormAuthentica
         if ($targetPath = $this->getTargetPath($request->getSession(), $firewallName)) {
             return new RedirectResponse($targetPath);
         }
+        else {
+            return new RedirectResponse('/');
+        }
 
         // For example:
         // return new RedirectResponse($this->urlGenerator->generate('some_route'));
