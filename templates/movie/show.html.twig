@@ -6,7 +6,7 @@
   <h1 class="display-5 fw-bold text-body-emphasis lh-1 mb-3">{{ movie.name }}</h1>
   <div class="row">
     <div class="col">
-    <h2>Date de sortie:</h2>
+    <h3>Date de sortie:</h3>
     {% if movie.releaseDate %}
         {{ movie.releaseDate.format("d/m/Y") }}
     {% else %}
@@ -16,7 +16,7 @@
     </div>
 
     <div class="col">
-    <h2>Durée:</h2>
+    <h3>Durée:</h3>
     {% if movie.duration %}
         {{ movie.duration.format("H") }}h{{ movie.duration.format("i") }}
     {% else %}
@@ -37,6 +37,19 @@
       {% endfor %}
     </div>
         
+  <div class="row">
+      <div class="col">
+          {% if averageRate %}
+              Note moyenne: {{ averageRate }}
+              {#{% for i in range(5, 0, -1) %}#}
+
+          {% else %}
+              <p>Il n'y a pas encore de note</p>
+          {% endif %}
+      </div>
+  </div>
+
+
   </div>
    <div class="row flex-lg-row-reverse  g-5 py-5">
       <div class="col-10 col-sm-8 col-lg-4">

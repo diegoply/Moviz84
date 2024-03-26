@@ -31,6 +31,8 @@ class MovieController extends AbstractController
     #[Route('/films/{id}', name: 'app_movie_show')]
     public function show(Movie $movie, Request $request, EntityManagerInterface $entityManager, Security $security, ReviewRepository $reviewRepository): Response
     {
+        $averageRate = $reviewRepository->getAverageRateByMovieId($movie->getId());
+        dump($averageRate);
         $user = $security->getUser();
 
         $review = $reviewRepository->findOneBy( ['movie' => $movie, 'user' => $user] );
@@ -58,6 +60,7 @@ class MovieController extends AbstractController
             'movie' => $movie,
             'form' => $form,
             'user' => $user,
+            'averageRate' => $averageRate,
         ]);
     }
 }
