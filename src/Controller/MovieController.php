@@ -12,16 +12,16 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
+use Symfony\Component\Routing\Annotation\Route;
 
 class MovieController extends AbstractController
 {
     #[Route('/films', name: 'app_movies')]
-    public function index(MovieRepository $movieRepository): Response
+    public function index(MovieRepository $movieRepository, Request $request): Response
     {
-        $movies = $movieRepository->findBy([], ['id' => 'DESC']);
-
-        
+        $genreId = $request->get('genreId');
+        $movies = $movieRepository->findMovies($genreId);
 
         return $this->render('movie/index.html.twig', [
             'movies' => $movies,
@@ -29,29 +29,29 @@ class MovieController extends AbstractController
     }
 
     #[Route('/films/{id}', name: 'app_movie_show')]
-    public function show(Movie $movie, Request $request, EntityManagerInterface $entityManager, Security $security, ReviewRepository $reviewRepository): Response
+    public function show(Movie $movie, Request $request, EntityManagerInterface $entityManager, 
+                        Security $security, ReviewRepository $reviewRepository,
+                        SessionInterface $session): Response
     {
+
+        $session->set('previous_url', $request->getUri());
         $averageRate = $reviewRepository->getAverageRateByMovieId($movie->getId());
-        dump($averageRate);
+
         $user = $security->getUser();
 
-        $review = $reviewRepository->findOneBy( ['movie' => $movie, 'user' => $user] );
+        $review = $reviewRepository->findOneBy(['movie' => $movie, 'user' => $user]);
 
-        if(!$review) {
+        if (!$review) {
             $review = new Review();
             $review->setMovie($movie);
             $review->setUser($user);
             $review->setApproved(false);
         }
 
-    
-
-
-        $form = $this->createForm(ReviewType::class, $review );
-
+        $form = $this->createForm(ReviewType::class, $review);
         $form->handleRequest($request);
 
-        if($form->isSubmitted() && $form->isValid()) {
+        if ($form->isSubmitted() && $form->isValid()) {
             $entityManager->persist($review);
             $entityManager->flush();
         }

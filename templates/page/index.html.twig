@@ -4,6 +4,12 @@
 
 {% block body %}
 
+   <div class="col">
+      {% for genre in movie.genres %}
+          <a href="{{ path('app_movies', {'genreId': genre.id} ) }}">{{ genre.name }}</a>
+      {% endfor %}
+    </div>
+
     <div class="row flex-lg-row-reverse align-items-center g-5 py-5">
       <div class="col-10 col-sm-8 col-lg-6">
        
